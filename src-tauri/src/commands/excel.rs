@@ -270,14 +270,14 @@ pub fn export_excel(state: State<'_, AppState>) -> Result<String, AppError> {
             Ok((
                 r.get::<_, String>(0)?, r.get::<_, Option<String>>(1)?,
                 r.get::<_, Option<String>>(2)?, r.get::<_, String>(3)?,
-                r.get::<_, i64>(4)?,
+                r.get::<_, Option<i64>>(4)?,
             ))
         })?;
         while let Some(row) = it.next() {
             let (created, pkey, tkey, desc, minutes) = row?;
             let vals: [String; 5] = [
                 created, pkey.unwrap_or_default(), tkey.unwrap_or_default(), desc,
-                fmt_hours(Some(minutes)),
+                fmt_hours(minutes),
             ];
             write_text_row(&mut wl, row_i, &vals)?;
             row_i += 1;

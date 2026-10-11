@@ -34,6 +34,13 @@ fn seed(db: &rusqlite::Connection) {
         params![pid, ts],
     )
     .unwrap();
+    // A log without a duration (NULL) must export without erroring.
+    db.execute(
+        "INSERT INTO work_logs (project_id, task_id, description, duration_minutes, user_id, created_at)
+         VALUES (?1, NULL, 'No duration set', NULL, 1, ?2)",
+        params![pid, ts],
+    )
+    .unwrap();
 }
 
 #[test]
